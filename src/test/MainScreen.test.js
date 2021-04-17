@@ -1,44 +1,48 @@
-import {render} from '@testing-library/react';
+import {cleanup, render} from '@testing-library/react';
 import MainScreen from "../components/MainScreen";
+import BookStubRepository from "./testdoubles/BookStubRepository";
 
 describe('MainScreen Unit Test', () => {
 
-    let stubBookRepository;
+    let bookStubRepository;
 
     beforeEach(() => {
-        stubBookRepository = jest.fn();
-
+        bookStubRepository = new BookStubRepository();
     })
 
+    afterEach(cleanup);
+
     test('shows a book title', () => {
-        stubBookRepository.mockReturnValue([
+        bookStubRepository.setGetAllBooks_return_value([
             {
                 title: 'Book Title1'
-            }]);
-        const getBooks_return_value = stubBookRepository();
-
-        const {getByText} = render(<MainScreen books={getBooks_return_value}/>);
-
+            }
+        ]);
+        const {getByText} = render(<MainScreen bookRepository={bookStubRepository}/>);
         expect(getByText('Book Title1')).toBeInTheDocument();
     });
 
+    test('shows a book id', () => {
+        bookStubRepository.setGetAllBooks_return_value([{id: 'special id 1'}]);
+        const {getByText} = render(<MainScreen bookRepository={bookStubRepository} />);
+        expect(getByText('special id 1')).toBeInTheDocument();
+    });
+
     test('shows nothing when empty', () => {
-        const {queryAllByText} = render(<MainScreen books={[]}/>);
+        const {queryAllByText} = render(<MainScreen bookRepository={bookStubRepository}/>);
         expect(queryAllByText('Book Title1').length).toBe(0);
     });
 
-    test('ㅂshows multiple titles dynamically', () => {
-        stubBookRepository.mockReturnValue([
+    test('shows multiple books dynamically', () => {
+        bookStubRepository.setGetAllBooks_return_value([
             {
-                title: 'Book1'
+                title: 'TDD values'
             },
             {
-                title: 'Book2'
-            }]);
-        const getBooks_return_value = stubBookRepository();
-
-        const {getAllByText} = render(<MainScreen books={getBooks_return_value}/>);
-
-        expect(getAllByText(/Book/).length).toBe(2);
-    })
+                title: 'XP values'
+            }
+        ]);
+        const {getAllByText} = render(<MainScreen bookRepository={bookStubRepository}/>);
+        expect(getAllByText(/values/).length).toBe(2);
+    });
 })

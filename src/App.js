@@ -1,8 +1,11 @@
 import MainScreen from "./components/MainScreen";
+import BookRepository from "./components/BookRepository";
+
+const bookRepository = BookRepository;
 
 function App() {
   return (
-    <MainScreen />
+    <MainScreen bookRepository={bookRepository} />
   );
 }
 

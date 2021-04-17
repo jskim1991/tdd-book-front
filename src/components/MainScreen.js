@@ -1,14 +1,23 @@
-import React from 'react';
-import Book from "./Book";
+import React, {useEffect, useState} from 'react';
+import BookListView from '../views/BookListView';
 
 const MainScreen = (props) => {
-    return(
+
+    const [books, setBooks] = useState([]);
+
+    function getBooksFromRepository() {
+        const books = props.bookRepository.getBooks();
+        setBooks(books);
+        console.log(books);
+    }
+
+    useEffect(() => {
+        getBooksFromRepository()
+    }, []);
+
+    return (
         <div>
-            {
-                props.books.map((b, idx) => (
-                    (<Book key={idx} title={b.title}/>)
-                ))
-            }
+            <BookListView books={books} />
         </div>
     )
 };
