@@ -3,11 +3,11 @@ class BookRepository {
     getBooks() {
         return [
             {
-                id: '122331441',
+                id: '1',
                 title: 'Thinking Java'
             },
             {
-                id: '121415555',
+                id: '2',
                 title: 'TDD by example'
             }
         ];
