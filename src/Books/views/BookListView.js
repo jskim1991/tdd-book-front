@@ -1,8 +1,21 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@material-ui/core";
+import BookRepository from "../components/BookRepository";
 
-const BookListView = (props) => {
+const BookListView = () => {
+
+    const [books, setBooks] = useState([]);
+
+    function getBooksFromRepository() {
+        const books = BookRepository.getBooks();
+        setBooks(books);
+        console.log(books);
+    }
+
+    useEffect(() => {
+        getBooksFromRepository();
+    }, []);
 
     return (
         <TableContainer component={Paper} >
@@ -15,8 +28,8 @@ const BookListView = (props) => {
                 </TableHead>
                 <TableBody>
                     {
-                        Array.isArray(props.books) && props.books.length ?
-                            props.books.map(book => (
+                        Array.isArray(books) && books.length ?
+                            books.map(book => (
                                 <TableRow key={book.id}>
                                     <TableCell align='right'>{book.id}</TableCell>
                                     <TableCell align='right'>{book.title}</TableCell>
